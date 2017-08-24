@@ -4,7 +4,16 @@ body {
 }
 #canvas {
     position: absolute;
-    top: 50px;
-    left: 10px;
+    top: 100px;
+    left: 100px;
     background: black;
+}
+h1 {
+    color: red;
+    /* font-size: 16px; */
+}
+.highScore {
+    position: absolute;
+    left: 200px;
+    top: 0;
 }

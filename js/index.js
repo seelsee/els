@@ -1,5 +1,7 @@
 var canvas = document.querySelector('#canvas');
 var context = canvas.getContext("2d");
+var score = document.querySelector('.score');
+var high = document.querySelector('.highScore');
 var cWidth = 500;
 var cHeitht = 500;
  canvas.width = cWidth;
@@ -26,7 +28,7 @@ function render(data, context) {
     for(let i =0;i < rowLength;i++) {
         for(let j =0;j < columnLength;j++) {
             // console.log(data[i][j])
-            context.fillStyle = data[i][j] == 0?'yellow':'red';
+            context.fillStyle = data[i][j] == 0?'skyblue':'red';
             context.fillRect(j*(w+10)+5,i*(h+10)+5,w,h);
         }
     }
@@ -150,17 +152,22 @@ function collideTestX(n, matrix1) {
     }
     return false;
 }
-
+var m = 0;
 function fall() {
     //撞到底部
     if(collideTest(matrix)) {
+       
         clearLine();
+        
         x = 4;
         y = 0;
+
         matrix = mold();
+        console.log(matrix);
         for(let i = 0;i< data[1].length;i++) {
-            if(data[1][i]) {
-                console.log('GG');
+            if(data[1][i] == 1) {
+                clearInterval(timer);
+                alert('GAME OVER!')
             }
             // console.log(i)
             // console.log(data[1][4])
@@ -175,11 +182,12 @@ var arr1 = [];
 for(let i = 0;i < 12;i++) {
     arr1.push(0);
 }
-
+//清除一行
 function clearLine() {
     var n;
 
-
+    
+    
     for (let i = 0; i < data.length; i++) {
         n = true;
         for(let j = 0;j < data[0].length;j++){
@@ -192,15 +200,27 @@ function clearLine() {
         if(n) {
             data.splice(i,1);
             data.unshift([].concat(arr1));
-            // m = m + 1;
-            console.log(m)
-
+            m++;
+            score.innerHTML = '得分:' + m * 100;
+            var mm = m * 100;
+            // hs(mm);
+            // console.log(m)
+            
         }
          
     }
 }
+// var hightScore = 0;
 
+// function hs(mm) {
+//     if(mm > localStorage.hightScore) {
+//         window.localStorage.setItem("highScore",mm);
+//         localStorage.hightScore = mm;
+//         console.log(localStorage.hightScore)
+//         high.innerHTML = '最高分:' + localStorage.hightScore;
 
+//     }
+// }
 
 //检测碰撞
 function collideTest(matrix1) {
