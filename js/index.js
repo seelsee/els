@@ -37,14 +37,27 @@ function render(data, context) {
     }
 }
 
-// function start() {
-//     var matrix = mold();
-    
-// }
+function start() {
+
+    ti(400);
+
+}
 
 
+var st = document.querySelector('.start');
+st.addEventListener('click', function() {
+    start();
 
+})
+var stopp = document.querySelector('.stop');
+stopp.addEventListener('click', function() {
+    stop();
 
+})
+function stop() {
+    clearInterval(timer);
+    return true;
+}
 
 
 
@@ -62,7 +75,7 @@ function ti(time) {
     },time);
     
 }
-ti(400)
+// ti(400)
 render(data,context);
 
 create(matrix);
@@ -178,13 +191,14 @@ function fall() {
 
         for(let i = 0;i< data[1].length;i++) {
             if(data[1][i] == 1) {
-                clearInterval(timer);
-                timer = null;
+                stop();
+                
                 var date1 = new Date();
                 var date2 = date1 - date;
                 var date3 = date2 / 1000;
-                console.log(date2)
+                // console.log(date2)
                 alert('GAME OVER!用时:'+ date3);
+                break;
                 // data[i]=0;
             }
             // console.log(i)
@@ -215,6 +229,7 @@ function clearLine() {
         if(n) {
             data.splice(i,1);
             data.unshift([].concat(arr1));
+            // console.log( data.unshift([].concat(arr1)));
             m++;
             score.innerHTML = '得分:' + m * 100;
             var mm = m * 100;
