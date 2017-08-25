@@ -6,6 +6,13 @@ var cWidth = 500;
 var cHeitht = 500;
  canvas.width = cWidth;
  canvas.height = cHeitht;
+// //  setInterval(function () {
+// //      var q =20;
+// //       q = q+10;
+//     context.rotate(20*Math.PI/180);
+//     context.rotate(40*Math.PI/180);
+// //  },5000)
+
  var data = map(12, 12);
  var arr = [
     [[1,1,1,1]],
@@ -14,7 +21,10 @@ var cHeitht = 500;
     [[0,1,1],[1,1,0]],
     [[0,1,0],[1,1,1]],
     [[1,0,0],[1,1,1]],
-    [[0,0,1],[1,1,1]]
+    [[0,0,1],[1,1,1]],
+    [[1,0,1],[1,1,1]],
+    [[1,1,1],[1,0,1]],
+    [[1,1,1],[0,1,0]]
 ]
 
 //数组中０代表方块，１代表移动的方块
@@ -38,6 +48,7 @@ function render(data, context) {
 var y = 0;
 var　x = 4;
 var matrix = mold();
+console.log(matrix)
 var timer = null;
 function ti(time) {
     timer = setInterval(function() {
@@ -156,18 +167,19 @@ var m = 0;
 function fall() {
     //撞到底部
     if(collideTest(matrix)) {
+        matrix = mold();
+        console.log(matrix);
        
         clearLine();
         
         x = 4;
         y = 0;
 
-        matrix = mold();
-        console.log(matrix);
         for(let i = 0;i< data[1].length;i++) {
             if(data[1][i] == 1) {
                 clearInterval(timer);
-                alert('GAME OVER!')
+                alert('GAME OVER!');
+                // data[i]=0;
             }
             // console.log(i)
             // console.log(data[1][4])
@@ -274,7 +286,7 @@ create()
 
 //随机生成一个方块
 function mold() {
-    var num = Math.floor(Math.random()*7);
+    var num = Math.floor(Math.random()*10);
 
     return arr[num];
 }
@@ -293,3 +305,7 @@ function map(row, column) {
 }
 
 
+setInterval(function() {
+    ctx.rotate(20*Math.PI/180);
+
+},1000)
