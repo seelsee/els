@@ -6,12 +6,6 @@ var cWidth = 500;
 var cHeitht = 500;
  canvas.width = cWidth;
  canvas.height = cHeitht;
-// //  setInterval(function () {
-// //      var q =20;
-// //       q = q+10;
-//     context.rotate(20*Math.PI/180);
-//     context.rotate(40*Math.PI/180);
-// //  },5000)
 
  var data = map(12, 12);
  var arr = [
@@ -26,7 +20,6 @@ var cHeitht = 500;
     [[1,1,1],[1,0,1]],
     [[1,1,1],[0,1,0]]
 ]
-
 //数组中０代表方块，１代表移动的方块
 
 //创建方块
@@ -43,12 +36,25 @@ function render(data, context) {
         }
     }
 }
+
+// function start() {
+//     var matrix = mold();
+    
+// }
+
+
+
+
+
+
+
+
 //生成地图
 
 var y = 0;
 var　x = 4;
 var matrix = mold();
-console.log(matrix)
+// console.log(matrix)
 var timer = null;
 function ti(time) {
     timer = setInterval(function() {
@@ -58,7 +64,6 @@ function ti(time) {
 }
 ti(400)
 render(data,context);
-
 
 create(matrix);
 
@@ -80,7 +85,6 @@ function play() {
                 if(!collideTestX(1,matrix)){
                     x++;
                 }
-
                 create(matrix);
                 break;
             case 38://上，变形
@@ -95,7 +99,6 @@ function play() {
                 onOff = true;
             }
                 break;
-                
         }
     }
     document.onkeyup = (ev) => {
@@ -106,15 +109,13 @@ function play() {
         }
     }
 }
-
 play();
 
 //变形
 function rotate() {
     var arr = [];
     var x = matrix[0].length;
-    // arr.length = x;
-    // arr.repeat([]);
+
     for(let i = 0;i < x;i++) {
         arr.push([]);
     }
@@ -168,7 +169,7 @@ function fall() {
     //撞到底部
     if(collideTest(matrix)) {
         matrix = mold();
-        console.log(matrix);
+        // console.log(matrix);
        
         clearLine();
         
@@ -178,14 +179,18 @@ function fall() {
         for(let i = 0;i< data[1].length;i++) {
             if(data[1][i] == 1) {
                 clearInterval(timer);
-                alert('GAME OVER!');
+                timer = null;
+                var date1 = new Date();
+                var date2 = date1 - date;
+                var date3 = date2 / 1000;
+                console.log(date2)
+                alert('GAME OVER!用时:'+ date3);
                 // data[i]=0;
             }
             // console.log(i)
             // console.log(data[1][4])
         }
     }
-    
     clear(matrix)
     y++;
     create(matrix);
@@ -197,8 +202,6 @@ for(let i = 0;i < 12;i++) {
 //清除一行
 function clearLine() {
     var n;
-
-    
     
     for (let i = 0; i < data.length; i++) {
         n = true;
@@ -215,24 +218,35 @@ function clearLine() {
             m++;
             score.innerHTML = '得分:' + m * 100;
             var mm = m * 100;
-            // hs(mm);
-            // console.log(m)
+            hs(mm);
+            console.log(m)
             
         }
-         
     }
 }
-// var hightScore = 0;
 
-// function hs(mm) {
-//     if(mm > localStorage.hightScore) {
-//         window.localStorage.setItem("highScore",mm);
-//         localStorage.hightScore = mm;
-//         console.log(localStorage.hightScore)
-//         high.innerHTML = '最高分:' + localStorage.hightScore;
+//最高分
+var hightScore = 0;
+var date = new Date();
+window.onload = function () {
+    
+    console.log(date)
+    if(localStorage.hightScore == undefined) {
+        high.innerHTML = '最高分:' + 0;
+        window.localStorage.setItem("hightScore",0);
+    } else {
+        high.innerHTML = '最高分:' + localStorage.hightScore;
+    }
+}
+function hs(mm) {
+    if(mm > localStorage.hightScore) {
+        window.localStorage.setItem("hightScore",mm);
+        localStorage.hightScore = mm;
+        console.log(localStorage.hightScore)
+        high.innerHTML = '最高分:' + localStorage.hightScore;
 
-//     }
-// }
+    }
+}
 
 //检测碰撞
 function collideTest(matrix1) {
@@ -258,14 +272,12 @@ function collideTest(matrix1) {
 function clear(arr) {
     for(let i =0;i < arr.length;i++) {
         for(let j = 0;j < arr[i].length;j++) {
-                if(arr[i][j]) {
-                    data[i+y][j+x] = 0;
-                }
-            
+            if(arr[i][j]) {
+                data[i+y][j+x] = 0;
+            }
         }
     } 
 }
-
 
 //创建方块
 function create(arr) {
@@ -278,23 +290,19 @@ function create(arr) {
             }
         }
     }
-
     render(data,context);
 }
 create()
 
-
 //随机生成一个方块
 function mold() {
     var num = Math.floor(Math.random()*10);
-
     return arr[num];
 }
 
 //创建数据
 function map(row, column) {
     var data = [];
-    
     for(let i = 0;i < row;i++) {
         data.push([]);
         for(let j = 0;j < column;j++) {
@@ -303,9 +311,3 @@ function map(row, column) {
     }
     return data;
 }
-
-
-setInterval(function() {
-    ctx.rotate(20*Math.PI/180);
-
-},1000)
