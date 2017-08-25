@@ -2,12 +2,13 @@ var canvas = document.querySelector('#canvas');
 var context = canvas.getContext("2d");
 var score = document.querySelector('.score');
 var high = document.querySelector('.highScore');
-var cWidth = 500;
-var cHeitht = 500;
+var cWidth = 500;//canvas宽
+var cHeitht = 500;//canvas高
  canvas.width = cWidth;
  canvas.height = cHeitht;
-
- var data = map(12, 12);
+var rectl = 12;
+var rectr = 12;
+ var data = map(rectl, rectr);
  var arr = [
     [[1,1,1,1]],
     [[1,1],[1,1]],
@@ -21,25 +22,60 @@ var cHeitht = 500;
     [[1,1,1],[0,1,0]]
 ]
 //数组中０代表方块，１代表移动的方块
-
-//创建方块
+var getRandomColor = () => {
+    return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).substr(-6); 
+  }
+//创建方块,背景
 function render(data, context) {
-    var w = cWidth / 12 - 10;
-    var h = w;
-    var rowLength = data.length;
-    var columnLength = data[0].length
-    for(let i =0;i < rowLength;i++) {
-        for(let j =0;j < columnLength;j++) {
+    var w = h = cWidth / 12 - 10;
+    for(let i =0;i < data.length;i++) {
+        for(let j =0;j < data[0].length;j++) {
             // console.log(data[i][j])
             context.fillStyle = data[i][j] == 0?'skyblue':'red';
-            context.fillRect(j*(w+10)+5,i*(h+10)+5,w,h);
+            context.fillRect(j*(w+10)+5,i*(h+10)+5,w,h);//绘制矩形
         }
     }
 }
 
-function start() {
 
-    ti(400);
+
+
+// var diff = document.querySelector('.nandu');
+// diff.addEventListener('click',function() {
+//     console.log(1)
+//     function render(data, context) {
+//     var w = h = cWidth / 12 - 10;
+//     for(let i =0;i < data.length;i++) {
+//         for(let j =0;j < data[0].length;j++) {
+//             // console.log(data[i][j])
+//             context.fillStyle = data[i][j] == 0?'#fff':getRandomColor();
+//             context.fillRect(j*(w+10)+5,i*(h+10)+5,w,h);//绘制矩形
+//         }
+//     }
+// }
+
+
+
+
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var t =500;//运行间隔时间
+function start() {
+    
+    ti(t);
 
 }
 
@@ -47,7 +83,7 @@ function start() {
 var st = document.querySelector('.start');
 st.addEventListener('click', function() {
     start();
-
+    create(matrix);
 })
 var stopp = document.querySelector('.stop');
 stopp.addEventListener('click', function() {
@@ -56,7 +92,7 @@ stopp.addEventListener('click', function() {
 })
 function stop() {
     clearInterval(timer);
-    return true;
+    return true; 
 }
 
 
@@ -66,7 +102,11 @@ function stop() {
 
 var y = 0;
 var　x = 4;
-var matrix = mold();
+var matrix;
+function bg() {
+    return matrix = mold();
+}
+bg();
 // console.log(matrix)
 var timer = null;
 function ti(time) {
@@ -75,10 +115,10 @@ function ti(time) {
     },time);
     
 }
-// ti(400)
+// ti(t)
 render(data,context);
 
-create(matrix);
+
 
 function play() {
     var onOff = false;
@@ -118,7 +158,7 @@ function play() {
         if(ev.keyCode == 40) {
             onOff = false;
             clearInterval(timer);
-            ti(400);
+            ti(t);
         }
     }
 }
@@ -138,7 +178,7 @@ function rotate() {
         }
     }
     //变形出边缘
-    if(collideTestX(1, arr) || collideTestX(-1, arr) || collideTest(arr)) {
+    if(collideTestX(1, arr) || collideTestX(-1, arr) || check(arr)) {
         return;
     }
     matrix = arr;
@@ -147,9 +187,9 @@ function rotate() {
 //左右移动,检测方块相互碰撞
 function collideTestX(n, matrix1) {
     //n为-1向左,1向右;
-    var maxX = data[0].length - matrix1[0].length;
+
     //左右边界
-    if(x+n<0|| x+n>maxX) {
+    if(x + n < 0 || x + n > data[0].length - matrix1[0].length) {
         return true;
     }
     //右往左碰撞
@@ -170,7 +210,7 @@ function collideTestX(n, matrix1) {
             while(!matrix1[i][index]) {
                 index--;
             }
-            if(!data[i+y] || data[i + y][x + index + 1]) {
+            if(!data[i + y] || data[i + y][x + index + 1]) {
                 return true;
             }
         }
@@ -180,7 +220,7 @@ function collideTestX(n, matrix1) {
 var m = 0;
 function fall() {
     //撞到底部
-    if(collideTest(matrix)) {
+    if(check(matrix)) {
         matrix = mold();
         // console.log(matrix);
        
@@ -197,17 +237,42 @@ function fall() {
                 var date2 = date1 - date;
                 var date3 = date2 / 1000;
                 // console.log(date2)
-                alert('GAME OVER!用时:'+ date3);
+                alert('GAME OVER!用时:'+ date3 + '秒');
+                // var c = true;
+                for(let j = 0;j<data[0].length;j++) {
+                    data[0][j]=0;
+                    data[1][j]=0;
+                    data[2][j]=0;
+                    data[3][j]=0;
+                    data[4][j]=0;
+                    data[5][j]=0;
+                    data[6][j]=0;
+                    data[7][j]=0;
+                    data[8][j]=0;
+                    data[9][j]=0;
+                    data[10][j]=0;
+                    data[11][j]=0;
+                }
+                
                 break;
+                
                 // data[i]=0;
             }
+            // if(data[1][i] == 1) {
+            //     var c;
+            //     return c = true;
+            // }
             // console.log(i)
             // console.log(data[1][4])
         }
     }
     clear(matrix)
     y++;
-    create(matrix);
+
+        create(matrix);
+
+
+    
 }
 var arr1 = [];
 for(let i = 0;i < 12;i++) {
@@ -234,7 +299,7 @@ function clearLine() {
             score.innerHTML = '得分:' + m * 100;
             var mm = m * 100;
             hs(mm);
-            console.log(m)
+            // console.log(m)
             
         }
     }
@@ -245,7 +310,7 @@ var hightScore = 0;
 var date = new Date();
 window.onload = function () {
     
-    console.log(date)
+    // console.log(date);
     if(localStorage.hightScore == undefined) {
         high.innerHTML = '最高分:' + 0;
         window.localStorage.setItem("hightScore",0);
@@ -264,7 +329,7 @@ function hs(mm) {
 }
 
 //检测碰撞
-function collideTest(matrix1) {
+function check(matrix1) {
     //到底部
     if(y + matrix1.length >= data.length ) {
         return true;
@@ -307,12 +372,11 @@ function create(arr) {
     }
     render(data,context);
 }
-create()
+// create();
 
 //随机生成一个方块
 function mold() {
-    var num = Math.floor(Math.random()*10);
-    return arr[num];
+    return arr[Math.floor(Math.random()*10)];
 }
 
 //创建数据
@@ -325,4 +389,10 @@ function map(row, column) {
         }
     }
     return data;
+}
+
+
+
+function init() {
+    
 }
